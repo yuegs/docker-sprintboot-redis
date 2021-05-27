@@ -1,0 +1,32 @@
+#指定 docker-compose.yml 文件的写法格式
+version: "3.9"  # optional since v1.27.0
+#多个容器的集合
+services:
+  redist:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "4631:9096"
+    links:   # 指定容器连接到当前连接，避免容器重启引发ip动态改变，无法连接
+      - "db_redis"
+
+  db_redis:
+    image: redis
+    container_name: db_redis
+    ports:
+      - "6679:6379"
+    hostname: db_redis
+#    networks:
+#    networks:
+#      node_net:
+#        ipv4_address: 172.28.1.4
+
+  # networking for the Redis container
+#  networks:
+#    node_net:
+#      ipam:
+#        driver: default
+#        config:
+#          - subnet: 172.28.0.0/16
+
